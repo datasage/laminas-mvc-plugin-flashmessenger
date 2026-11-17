@@ -76,7 +76,8 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/datasage/laminas-mvc"
+            "url": "https://github.com/datasage/laminas-mvc",
+            "no-api": true
         }
     ],
     "suggest": {

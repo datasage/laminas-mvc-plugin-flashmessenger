@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "63eb012361709ea44d22d58562c5256b",
+    "content-hash": "e455966e3f51a0e46f852beb820a38d3",
     "packages": [
         {
             "name": "brick/varexporter",
@@ -530,7 +530,7 @@
             "version": "4.0.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/datasage/laminas-mvc.git",
+                "url": "https://github.com/datasage/laminas-mvc",
                 "reference": "1f2492313fbfdee90db6b00a10c278349b757a14"
             },
             "dist": {
