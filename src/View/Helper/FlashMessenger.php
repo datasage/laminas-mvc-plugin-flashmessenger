@@ -5,17 +5,13 @@ declare(strict_types=1);
 namespace Laminas\Mvc\Plugin\FlashMessenger\View\Helper;
 
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger as PluginFlashMessenger;
-use Laminas\View\Exception\InvalidArgumentException;
 use Laminas\View\Helper\AbstractHelper;
 use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Helper\TranslatorAwareTrait;
 
 use function array_walk_recursive;
 use function assert;
-use function call_user_func_array;
-use function gettype;
 use function implode;
-use function is_object;
 use function method_exists;
 use function sprintf;
 
@@ -48,7 +44,7 @@ class FlashMessenger extends AbstractHelper
      *
      * @var array<string, string>
      */
-    protected $classMessages = [
+    protected array $classMessages = [
         'info'    => PluginFlashMessenger::NAMESPACE_INFO,
         'error'   => PluginFlashMessenger::NAMESPACE_ERROR,
         'success' => PluginFlashMessenger::NAMESPACE_SUCCESS,
@@ -58,35 +54,25 @@ class FlashMessenger extends AbstractHelper
 
     /**
      * Templates for the open/close/separators for message tags
-     *
-     * @var string
      */
-    protected $messageCloseString = '</li></ul>';
-    /** @var string */
-    protected $messageOpenFormat = '<ul%s><li>';
-    /** @var string */
-    protected $messageSeparatorString = '</li><li>';
+    protected string $messageCloseString     = '</li></ul>';
+    protected string $messageOpenFormat      = '<ul%s><li>';
+    protected string $messageSeparatorString = '</li><li>';
 
     /**
      * Flag whether to escape messages
-     *
-     * @var bool
      */
-    protected $autoEscape = true;
+    protected bool $autoEscape = true;
 
     /**
      * Html escape helper
-     *
-     * @var EscapeHtml|null
      */
-    protected $escapeHtmlHelper;
+    protected ?EscapeHtml $escapeHtmlHelper = null;
 
     /**
      * Flash messenger plugin
-     *
-     * @var PluginFlashMessenger|null
      */
-    protected $pluginFlashMessenger;
+    protected ?PluginFlashMessenger $pluginFlashMessenger = null;
 
     /**
      * All namespaces of FlashMessenger
@@ -110,10 +96,9 @@ class FlashMessenger extends AbstractHelper
     /**
      * Returns the flash messenger plugin controller
      *
-     * @param  string|null $namespace
      * @return FlashMessenger|PluginFlashMessenger|array<array-key, string>
      */
-    public function __invoke($namespace = null)
+    public function __invoke(?string $namespace = null): static|array
     {
         if (null === $namespace) {
             return $this;
@@ -132,19 +117,15 @@ class FlashMessenger extends AbstractHelper
      */
     public function __call($method, $argv)
     {
-        $flashMessenger = $this->getPluginFlashMessenger();
-        return call_user_func_array([$flashMessenger, $method], $argv);
+        return $this->getPluginFlashMessenger()->$method(...$argv);
     }
 
     /**
      * Render Messages
      *
-     * @param  string    $namespace
      * @param  array<array-key, string> $classes
-     * @param  null|bool $autoEscape
-     * @return string
      */
-    public function render($namespace = 'default', array $classes = [], $autoEscape = null)
+    public function render(string $namespace = 'default', array $classes = [], ?bool $autoEscape = null): string
     {
         $flashMessenger = $this->getPluginFlashMessenger();
         $messages       = $flashMessenger->getMessagesFromNamespace($namespace);
@@ -153,12 +134,8 @@ class FlashMessenger extends AbstractHelper
 
     /**
      * Render Current Messages
-     *
-     * @param  string    $namespace
-     * @param  bool|null $autoEscape
-     * @return string
      */
-    public function renderCurrent($namespace = 'default', array $classes = [], $autoEscape = null)
+    public function renderCurrent(string $namespace = 'default', array $classes = [], ?bool $autoEscape = null): string
     {
         $flashMessenger = $this->getPluginFlashMessenger();
         $messages       = $flashMessenger->getCurrentMessagesFromNamespace($namespace);
@@ -168,18 +145,15 @@ class FlashMessenger extends AbstractHelper
     /**
      * Render Messages
      *
-     * @param string    $namespace
      * @param array<array-key, string> $messages
      * @param array<array-key, string> $classes
-     * @param bool|null $autoEscape
-     * @return string
      */
     protected function renderMessages(
-        $namespace = 'default',
+        string $namespace = 'default',
         array $messages = [],
         array $classes = [],
-        $autoEscape = null
-    ) {
+        ?bool $autoEscape = null
+    ): string {
         if (empty($messages)) {
             return '';
         }
@@ -235,7 +209,7 @@ class FlashMessenger extends AbstractHelper
      * @param  bool $autoEscape
      * @return self
      */
-    public function setAutoEscape($autoEscape = true)
+    public function setAutoEscape($autoEscape = true): static
     {
         $this->autoEscape = (bool) $autoEscape;
         return $this;
@@ -243,10 +217,8 @@ class FlashMessenger extends AbstractHelper
 
     /**
      * Return whether auto escaping is enabled or disabled
-     *
-     * @return bool
      */
-    public function getAutoEscape()
+    public function getAutoEscape(): bool
     {
         return $this->autoEscape;
     }
@@ -254,10 +226,9 @@ class FlashMessenger extends AbstractHelper
     /**
      * Set the string used to close message representation
      *
-     * @param  string $messageCloseString
      * @return FlashMessenger
      */
-    public function setMessageCloseString($messageCloseString, ?string $namespaceName = null)
+    public function setMessageCloseString(string $messageCloseString, ?string $namespaceName = null): static
     {
         $namespaceName = $namespaceName ?? $this->getDefaultNamespaceName();
         $namespace     = $this->getNamespace($namespaceName);
@@ -272,10 +243,8 @@ class FlashMessenger extends AbstractHelper
 
     /**
      * Get the string used to close message representation
-     *
-     * @return string
      */
-    public function getMessageCloseString(?string $namespaceName = null)
+    public function getMessageCloseString(?string $namespaceName = null): string
     {
         $namespaceName = $namespaceName ?? $this->getDefaultNamespaceName();
         $namespace     = $this->getNamespace($namespaceName);
@@ -289,10 +258,9 @@ class FlashMessenger extends AbstractHelper
     /**
      * Set the formatted string used to open message representation
      *
-     * @param  string $messageOpenFormat
      * @return FlashMessenger
      */
-    public function setMessageOpenFormat($messageOpenFormat, ?string $namespaceName = null)
+    public function setMessageOpenFormat(string $messageOpenFormat, ?string $namespaceName = null): static
     {
         $namespaceName = $namespaceName ?? $this->getDefaultNamespaceName();
         $namespace     = $this->getNamespace($namespaceName);
@@ -306,10 +274,8 @@ class FlashMessenger extends AbstractHelper
 
     /**
      * Get the formatted string used to open message representation
-     *
-     * @return string
      */
-    public function getMessageOpenFormat(?string $namespaceName = null)
+    public function getMessageOpenFormat(?string $namespaceName = null): string
     {
         $namespaceName = $namespaceName ?? $this->getDefaultNamespaceName();
         $namespace     = $this->getNamespace($namespaceName);
@@ -323,10 +289,9 @@ class FlashMessenger extends AbstractHelper
     /**
      * Set the string used to separate messages
      *
-     * @param  string $messageSeparatorString
      * @return FlashMessenger
      */
-    public function setMessageSeparatorString($messageSeparatorString, ?string $namespaceName = null)
+    public function setMessageSeparatorString(string $messageSeparatorString, ?string $namespaceName = null): static
     {
         $namespaceName = $namespaceName ?? $this->getDefaultNamespaceName();
         $namespace     = $this->getNamespace($namespaceName);
@@ -340,10 +305,8 @@ class FlashMessenger extends AbstractHelper
 
     /**
      * Get the string used to separate messages
-     *
-     * @return string
      */
-    public function getMessageSeparatorString(?string $namespaceName = null)
+    public function getMessageSeparatorString(?string $namespaceName = null): string
     {
         $namespaceName = $namespaceName ?? $this->getDefaultNamespaceName();
         $namespace     = $this->getNamespace($namespaceName);
@@ -357,33 +320,18 @@ class FlashMessenger extends AbstractHelper
     /**
      * Set the flash messenger plugin
      *
-     * @param  PluginFlashMessenger $pluginFlashMessenger
      * @return FlashMessenger
-     * @throws InvalidArgumentException For an invalid $pluginFlashMessenger.
      */
-    public function setPluginFlashMessenger($pluginFlashMessenger)
+    public function setPluginFlashMessenger(PluginFlashMessenger $pluginFlashMessenger): static
     {
-        if (
-            ! $pluginFlashMessenger instanceof PluginFlashMessenger
-        ) {
-            throw new InvalidArgumentException(sprintf(
-                '%s expects a %s instance; received %s',
-                __METHOD__,
-                PluginFlashMessenger::class,
-                is_object($pluginFlashMessenger) ? $pluginFlashMessenger::class : gettype($pluginFlashMessenger)
-            ));
-        }
-
         $this->pluginFlashMessenger = $pluginFlashMessenger;
         return $this;
     }
 
     /**
      * Get the flash messenger plugin
-     *
-     * @return PluginFlashMessenger
      */
-    public function getPluginFlashMessenger()
+    public function getPluginFlashMessenger(): PluginFlashMessenger
     {
         if (null === $this->pluginFlashMessenger) {
             $this->setPluginFlashMessenger(new PluginFlashMessenger());
@@ -395,12 +343,10 @@ class FlashMessenger extends AbstractHelper
 
     /**
      * Retrieve the escapeHtml helper
-     *
-     * @return EscapeHtml
      */
-    protected function getEscapeHtmlHelper()
+    protected function getEscapeHtmlHelper(): EscapeHtml
     {
-        if ($this->escapeHtmlHelper) {
+        if ($this->escapeHtmlHelper !== null) {
             return $this->escapeHtmlHelper;
         }
 

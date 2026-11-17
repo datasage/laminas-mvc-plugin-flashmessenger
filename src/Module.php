@@ -16,10 +16,8 @@ class Module
      * Provide application configuration.
      *
      * Adds aliases and factories for the FlashMessenger plugin.
-     *
-     * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return [
             'controller_plugins' => [
@@ -28,12 +26,6 @@ class Module
                     'flashMessenger'                               => FlashMessenger::class,
                     'FlashMessenger'                               => FlashMessenger::class,
                     'Laminas\Mvc\Controller\Plugin\FlashMessenger' => FlashMessenger::class,
-
-                    // Legacy Zend Framework aliases
-                    // @codingStandardsIgnoreStart
-                    'Zend\Mvc\Controller\Plugin\FlashMessenger'           => 'Laminas\Mvc\Controller\Plugin\FlashMessenger',
-                    \Zend\Mvc\Plugin\FlashMessenger\FlashMessenger::class => FlashMessenger::class,
-                    // @codingStandardsIgnoreEnd
                 ],
                 'factories' => [
                     FlashMessenger::class => InvokableFactory::class,
@@ -44,16 +36,9 @@ class Module
                     'flashmessenger' => View\Helper\FlashMessenger::class,
                     'flashMessenger' => View\Helper\FlashMessenger::class,
                     'FlashMessenger' => View\Helper\FlashMessenger::class,
-
-                    // Legacy Zend Framework aliases
-                    // @codingStandardsIgnoreStart
-                    \Zend\Mvc\Plugin\FlashMessenger\View\Helper\FlashMessenger::class => View\Helper\FlashMessenger::class,
-                    'zendviewhelperflashmessenger' => 'laminasviewhelperflashmessenger',
-                    // @codingStandardsIgnoreEnd
                 ],
                 'factories' => [
                     View\Helper\FlashMessenger::class => View\Helper\FlashMessengerFactory::class,
-                    'laminasviewhelperflashmessenger' => View\Helper\FlashMessengerFactory::class,
                 ],
             ],
         ];

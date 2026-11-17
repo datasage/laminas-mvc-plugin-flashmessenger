@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Laminas\Mvc\Plugin\FlashMessenger\View\Helper;
 
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger as PluginFlashMessenger;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Override;
 use Psr\Container\ContainerInterface;
 
 use function is_array;
-use function method_exists;
 
 class FlashMessengerFactory implements FactoryInterface
 {
@@ -18,17 +18,12 @@ class FlashMessengerFactory implements FactoryInterface
      *
      * @param string $name
      * @param null|array $options
-     * @return FlashMessenger
      */
-    public function __invoke(ContainerInterface $container, $name, ?array $options = null)
+    #[Override]
+    public function __invoke(ContainerInterface $container, $name, ?array $options = null): FlashMessenger
     {
-        // test if we are using Laminas\ServiceManager v2 or v3
-        if (! method_exists($container, 'configure')) {
-            $container = $container->getServiceLocator();
-        }
-
         $controllerPluginManager = $container->get('ControllerPluginManager');
-        /** @var \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger $flashMessenger */
+        /** @var PluginFlashMessenger $flashMessenger */
         $flashMessenger = $controllerPluginManager->get('flashmessenger');
 
         $config = $container->get('config');
@@ -48,14 +43,14 @@ class FlashMessengerFactory implements FactoryInterface
     }
 
     /**
-     * @param \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger $flashMessenger
      * @param array $configHelper {
      *      message_open_format?:string, message_close_string?:string, message_separator_string?:string
      * }
-     * @return FlashMessenger
      */
-    private function createHelperWithOldConfig($flashMessenger, $configHelper)
-    {
+    private function createHelperWithOldConfig(
+        PluginFlashMessenger $flashMessenger,
+        array $configHelper
+    ): FlashMessenger {
         $helper = new FlashMessenger();
         $helper->setPluginFlashMessenger($flashMessenger);
 
@@ -75,13 +70,10 @@ class FlashMessengerFactory implements FactoryInterface
         return $helper;
     }
 
-    /**
-     * @param \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger $flashMessenger
-     * @param array $configHelper
-     * @return FlashMessenger
-     */
-    private function createHelperWithActualConfig($flashMessenger, $configHelper)
-    {
+    private function createHelperWithActualConfig(
+        PluginFlashMessenger $flashMessenger,
+        array $configHelper
+    ): FlashMessenger {
         $namespaces = [];
         /**
          * @var array<string, mixed> $arrProperties {
@@ -123,17 +115,5 @@ class FlashMessengerFactory implements FactoryInterface
         }
 
         return true;
-    }
-
-    /**
-     * Create service (v2)
-     *
-     * @param string $normalizedName
-     * @param string $requestedName
-     * @return FlashMessenger
-     */
-    public function createService(ServiceLocatorInterface $container, $normalizedName = null, $requestedName = null)
-    {
-        return $this($container, $requestedName);
     }
 }
