@@ -1,17 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
+<files psalm-version="6.20.12@56e5217b13db8789c2b8cfcc73d0f902df2cda11">
   <file src="src/FlashMessenger.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[FlashMessenger]]></code>
+    </ClassMustBeFinal>
+    <MissingClassConstType>
+      <code><![CDATA[NAMESPACE_DEFAULT = 'default']]></code>
+      <code><![CDATA[NAMESPACE_ERROR = 'error']]></code>
+      <code><![CDATA[NAMESPACE_INFO = 'info']]></code>
+      <code><![CDATA[NAMESPACE_SUCCESS = 'success']]></code>
+      <code><![CDATA[NAMESPACE_WARNING = 'warning']]></code>
+    </MissingClassConstType>
+    <MissingOverrideAttribute>
+      <code><![CDATA[#[ReturnTypeWillChange]]]></code>
+      <code><![CDATA[#[ReturnTypeWillChange]]]></code>
+    </MissingOverrideAttribute>
     <MixedMethodCall>
       <code><![CDATA[push]]></code>
     </MixedMethodCall>
     <MixedPropertyTypeCoercion>
       <code><![CDATA[$this->messages]]></code>
     </MixedPropertyTypeCoercion>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[addWarningMessage]]></code>
+      <code><![CDATA[count]]></code>
+      <code><![CDATA[getCurrentWarningMessages]]></code>
+      <code><![CDATA[getWarningMessages]]></code>
+      <code><![CDATA[hasCurrentWarningMessages]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedReturnValue>
+      <code><![CDATA[bool]]></code>
+      <code><![CDATA[bool]]></code>
+      <code><![CDATA[bool]]></code>
+      <code><![CDATA[bool]]></code>
+    </PossiblyUnusedReturnValue>
     <UnusedForeachValue>
       <code><![CDATA[$messages]]></code>
     </UnusedForeachValue>
   </file>
+  <file src="src/Module.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[Module]]></code>
+    </ClassMustBeFinal>
+    <UnusedClass>
+      <code><![CDATA[Module]]></code>
+    </UnusedClass>
+  </file>
   <file src="src/View/Helper/FlashMessenger.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[FlashMessenger]]></code>
+    </ClassMustBeFinal>
+    <DeprecatedClass>
+      <code><![CDATA[AbstractHelper]]></code>
+    </DeprecatedClass>
+    <DeprecatedTrait>
+      <code><![CDATA[TranslatorAwareTrait]]></code>
+    </DeprecatedTrait>
     <DocblockTypeContradiction>
       <code><![CDATA[gettype($pluginFlashMessenger)]]></code>
     </DocblockTypeContradiction>
@@ -41,6 +85,12 @@
     </RedundantConditionGivenDocblockType>
   </file>
   <file src="src/View/Helper/FlashMessengerFactory.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[FlashMessengerFactory]]></code>
+    </ClassMustBeFinal>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function __invoke(ContainerInterface $container, $name, ?array $options = null)]]></code>
+    </MissingOverrideAttribute>
     <MixedArrayAccess>
       <code><![CDATA[$config['view_helper_config']]]></code>
       <code><![CDATA[$config['view_helper_config']['flashmessenger']]]></code>
@@ -58,8 +108,35 @@
     <PossiblyNullArgument>
       <code><![CDATA[$requestedName]]></code>
     </PossiblyNullArgument>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[createService]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$normalizedName]]></code>
+    </PossiblyUnusedParam>
     <UndefinedInterfaceMethod>
       <code><![CDATA[getServiceLocator]]></code>
     </UndefinedInterfaceMethod>
+  </file>
+  <file src="src/View/Helper/FlashMessengerNamespace.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[FlashMessengerNamespace]]></code>
+    </ClassMustBeFinal>
+  </file>
+  <file src="test/FlashMessengerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[FlashMessengerTest]]></code>
+    </ClassMustBeFinal>
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function setUp(): void]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="test/View/Helper/FlashMessengerTest.php">
+    <ClassMustBeFinal>
+      <code><![CDATA[FlashMessengerTest]]></code>
+    </ClassMustBeFinal>
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function setUp(): void]]></code>
+    </MissingOverrideAttribute>
   </file>
 </files>

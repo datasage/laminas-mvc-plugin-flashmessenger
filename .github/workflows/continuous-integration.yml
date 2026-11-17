@@ -1,11 +1,44 @@
 name: "Continuous Integration"
 
+# Inlined from laminas/workflow-continuous-integration@1.x. That reusable
+# workflow restricts which repositories may call it, so calls from outside the
+# laminas organisation fail with a startup_failure. The two actions it wraps are
+# public, so they can be used directly from a fork. Action SHAs and job
+# structure are kept identical to the upstream workflow.
+
 on:
   pull_request:
   push:
     branches:
+      - '*.x'
     tags:
+      - '*'
 
 jobs:
-  ci:
-    uses: laminas/workflow-continuous-integration/.github/workflows/continuous-integration.yml@1.x
+  matrix:
+    name: Generate job matrix
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write # Creates checks
+      contents: read
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - name: Gather CI configuration
+        id: matrix
+        uses: laminas/laminas-ci-matrix-action@1816e09e14bfc59d5c544779adcb9bc91089f424 # 1.36.0
+
+  qa:
+    name: QA Checks
+    needs: [matrix]
+    runs-on: ${{ matrix.operatingSystem }}
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix.outputs.matrix) }}
+    steps:
+      - name: ${{ matrix.name }}
+        uses: laminas/laminas-continuous-integration-action@cf90abc1ac0c035287580d7d6c3464e8999fc986 # 1.47.0
+        with:
+          job: ${{ matrix.job }}

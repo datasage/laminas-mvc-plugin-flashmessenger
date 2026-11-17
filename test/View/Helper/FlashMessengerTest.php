@@ -392,11 +392,11 @@ class FlashMessengerTest extends TestCase
 
     public function testCanTranslateMessages(): void
     {
-        $mockTranslator = $this->getMockBuilder(Translator::class)->getMock();
+        $mockTranslator = $this->createMock(Translator::class);
         $mockTranslator
             ->expects($this->exactly(1))
             ->method('translate')
-            ->will($this->returnValue('translated message'));
+            ->willReturn('translated message');
 
         $this->helper->setTranslator($mockTranslator);
         $this->assertTrue($this->helper->hasTranslator());
@@ -410,11 +410,11 @@ class FlashMessengerTest extends TestCase
 
     public function testCanTranslateCurrentMessages(): void
     {
-        $mockTranslator = $this->getMockBuilder(Translator::class)->getMock();
+        $mockTranslator = $this->createMock(Translator::class);
         $mockTranslator
             ->expects($this->exactly(1))
             ->method('translate')
-            ->will($this->returnValue('translated message'));
+            ->willReturn('translated message');
 
         $this->helper->setTranslator($mockTranslator);
         $this->assertTrue($this->helper->hasTranslator());
@@ -440,9 +440,6 @@ class FlashMessengerTest extends TestCase
         $this->assertTrue($this->helper->getAutoEscape());
     }
 
-    /**
-     * @covers \Laminas\Mvc\Plugin\FlashMessenger\View\Helper\FlashMessenger::render
-     */
     public function testMessageIsEscapedByDefault(): void
     {
         $helper = new FlashMessenger();
@@ -454,9 +451,6 @@ class FlashMessengerTest extends TestCase
         $this->assertSame($displayAssertion, $display);
     }
 
-    /**
-     * @covers \Laminas\Mvc\Plugin\FlashMessenger\View\Helper\FlashMessenger::render
-     */
     public function testMessageIsNotEscapedWhenAutoEscapeIsFalse(): void
     {
         $helper = new FlashMessenger();
@@ -469,9 +463,6 @@ class FlashMessengerTest extends TestCase
         $this->assertSame($displayAssertion, $display);
     }
 
-    /**
-     * @covers \Laminas\Mvc\Plugin\FlashMessenger\View\Helper\FlashMessenger::render
-     */
     public function testCanSetAutoEscapeOnRender(): void
     {
         $helper = new FlashMessenger();
@@ -483,9 +474,6 @@ class FlashMessengerTest extends TestCase
         $this->assertSame($displayAssertion, $display);
     }
 
-    /**
-     * @covers \Laminas\Mvc\Plugin\FlashMessenger\View\Helper\FlashMessenger::render
-     */
     public function testRenderUsesCurrentAutoEscapeByDefault(): void
     {
         $helper = new FlashMessenger();
@@ -507,9 +495,6 @@ class FlashMessengerTest extends TestCase
         $this->assertSame($displayAssertion, $display);
     }
 
-    /**
-     * @covers \Laminas\Mvc\Plugin\FlashMessenger\View\Helper\FlashMessenger::renderCurrent
-     */
     public function testCurrentMessageIsEscapedByDefault(): void
     {
         $this->helper->addMessage('Foo<br />bar');
@@ -519,9 +504,6 @@ class FlashMessengerTest extends TestCase
         $this->assertSame($displayAssertion, $display);
     }
 
-    /**
-     * @covers \Laminas\Mvc\Plugin\FlashMessenger\View\Helper\FlashMessenger::renderCurrent
-     */
     public function testCurrentMessageIsNotEscapedWhenAutoEscapeIsFalse(): void
     {
         $this->helper->addMessage('Foo<br />bar');
@@ -532,9 +514,6 @@ class FlashMessengerTest extends TestCase
         $this->assertSame($displayAssertion, $display);
     }
 
-    /**
-     * @covers \Laminas\Mvc\Plugin\FlashMessenger\View\Helper\FlashMessenger::renderCurrent
-     */
     public function testCanSetAutoEscapeOnRenderCurrent(): void
     {
         $this->helper->addMessage('Foo<br />bar');
@@ -544,9 +523,6 @@ class FlashMessengerTest extends TestCase
         $this->assertSame($displayAssertion, $display);
     }
 
-    /**
-     * @covers \Laminas\Mvc\Plugin\FlashMessenger\View\Helper\FlashMessenger::renderCurrent
-     */
     public function testRenderCurrentUsesCurrentAutoEscapeByDefault(): void
     {
         $this->helper->addMessage('Foo<br />bar');
@@ -562,9 +538,6 @@ class FlashMessengerTest extends TestCase
         $this->assertSame($displayAssertion, $display);
     }
 
-    /**
-     * @covers \Laminas\Mvc\Plugin\FlashMessenger\View\Helper\FlashMessenger::renderCurrent
-     */
     public function testNamespaceMessageFormatByConfig(): void
     {
         $this->seedMessages();
@@ -598,9 +571,6 @@ class FlashMessengerTest extends TestCase
         $this->assertEquals($displayInfoAssertion, $displayInfo);
     }
 
-    /**
-     * @covers \Laminas\Mvc\Plugin\FlashMessenger\View\Helper\FlashMessenger::renderCurrent
-     */
     public function testCustomNamespaceMessageFormatByConfig(): void
     {
         $config   = [

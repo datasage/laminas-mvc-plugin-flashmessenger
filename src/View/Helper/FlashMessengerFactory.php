@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Laminas\Mvc\Plugin\FlashMessenger\View\Helper;
 
-// phpcs:disable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
-
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerInterface;
 
 use function is_array;
 use function method_exists;
