@@ -9,6 +9,8 @@ use Laminas\Session\ManagerInterface;
 use Laminas\Session\SessionManager;
 use PHPUnit\Framework\TestCase;
 
+use function iterator_to_array;
+
 class FlashMessengerTest extends TestCase
 {
     private FlashMessenger $helper;
@@ -278,6 +280,12 @@ class FlashMessengerTest extends TestCase
     {
         $this->seedMessages();
         $this->assertCount(2, $this->helper);
+    }
+
+    public function testCountAndIterationAreEmptyWithoutMessages(): void
+    {
+        $this->assertCount(0, $this->helper);
+        $this->assertSame([], iterator_to_array($this->helper));
     }
 
     public function testAddMessageWithLoops(): void
