@@ -1,5 +1,16 @@
 {
-    "ignore_php_platform_requirements": {
-        "8.4": true
+  "exclude": [
+    {
+      "name": "Documentation Linting"
+    },
+    {
+      "name": "MkDocs Linting"
+    },
+    {
+      "name": "README Linting"
     }
+  ],
+  "ignore_php_platform_requirements": {
+    "8.6": true
+  }
 }

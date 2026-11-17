@@ -38,7 +38,7 @@ class FlashMessengerTest extends TestCase
 
     public function testSessionManagerIsMutable(): void
     {
-        $session               = $this->getMockBuilder(ManagerInterface::class)->getMock();
+        $session               = $this->createStub(ManagerInterface::class);
         $currentSessionManager = $this->helper->getSessionManager();
 
         $this->helper->setSessionManager($session);
